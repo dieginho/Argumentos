@@ -1,0 +1,190 @@
+import React, {useState, useEffect} from 'react';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { Table,
+         TableBody, 
+         TableCell, 
+         TableHead, 
+         TableRow, 
+         Paper, 
+         TableContainer, 
+         TextField } from '@material-ui/core';
+import MaterialTable from 'material-table';
+
+
+const StyledTableCell = withStyles((theme) => ({
+    head: {
+      backgroundColor: theme.palette.primary.light,
+      color: theme.palette.common.white,
+      height: "5px",
+    },
+    body: {
+      fontSize: 14,
+      height: "5px",
+    },
+  }))(TableCell);
+  
+  const StyledTableRow = withStyles((theme) => ({
+    root: {
+      '&:nth-of-type(odd)': {
+        backgroundColor: theme.palette.action.hover,
+        height: "5px",
+      },
+      body: {
+        fontSize: 14,
+        height: "5px",
+      },
+    },
+  }))(TableRow);
+
+const ListArguments = ({bot, setSave}) => {
+
+    const [labels, setlabels] = useState([]);
+    // const {name, error, helperText} = label;
+
+    const [error, setError] = useState(false);
+	const [helperText, setHelperText] = useState('');
+    
+    const elem = bot.map(b => {
+        const{Arguments:{Input}} = b; 
+        return Input;
+
+    });
+
+    const lista = elem.filter(x => x);
+    const arrArguments = () => {
+        if(lista.length > 0){
+            const names = JSON.parse(lista);
+            
+            // const n = names.map((element, i) => {
+            //     // console.log(element.name);
+            //     // test.push({[element.name]:element.name});
+            //     console.log({[element.name]:element.name});
+            //     let arr =[];
+            //     arr.push({[element.name]:element.name});
+            // });
+           
+            React.useEffect(() => {
+                /**
+                * If Friendslist is cleared, App gets into a infinite render loop since the
+                * watchValues will always return the default values [length 2] and will never
+                * equal 0 [Cleared friends list size]
+                */
+                if (watchValue.length !== friends.length) {
+                setValue(name, friends);
+                }
+                }, [setValue, name, friends, friends.length, watchValue.length]);
+
+
+                // setlabels(...labels, n);
+                // setLabel([...label, {id: i, value: element.name }])
+                // setLabel([...label, [{[element.name]:element.name}]]);
+                // setLabel({[element.name]:element.name});
+
+            //     const addlabel = (newlabel) => setlabels([...labels, newlabel])
+                
+            //     names.forEach(item =>{
+            //             addlabel(item.name);
+            //         });
+             
+            // console.log(labels);
+        }
+    };
+
+    useEffect(() => {
+          arrArguments();
+    },[bot])
+    
+    useEffect(() => {
+        if(!error)
+            setSave(e => error);
+        return () => {
+        }
+    }, [error])
+
+    const handleChangeLabel = ({target}) => {
+        console.log(target);
+        if(target.value !== ''){
+            setlabels({
+                [target.name]: target.value,
+            });
+        }
+        else{
+            setlabels({
+                [target.name]: target.value,
+            });
+        }
+    }
+    
+    
+    
+    if(lista.length < 1){
+        return <h1>Bot sin Argumentos</h1>
+    }
+    else{
+        const rows = JSON.parse(lista);
+        return (
+        <>
+            <TableContainer component={Paper}>
+                <Table aria-label="simple table">
+                    <TableHead>
+                        <TableRow >
+                            <StyledTableCell>Name</StyledTableCell>
+                            <StyledTableCell>Label</StyledTableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                    {rows.map((row) => (
+                        <StyledTableRow  key={row.name}>
+                            <StyledTableCell   component="th" scope="row">
+                                {row.name}
+                            </StyledTableCell>
+                            <StyledTableCell  align="right">
+                            <TextField
+									id="label"
+									margin="dense"
+									multiline
+									onChange={handleChangeLabel}
+									rows={1}
+									type="text"
+                                    defaultValue={row.name}
+                                    error={error}
+                                    fullWidth
+                                    helperText={helperText}
+                                    inputProps={{ maxLength: 50 }}
+                                    name={row.name}
+                                    required={true}
+                                    size='small'
+                                    variant='outlined'
+							>
+							</TextField>
+                            </StyledTableCell>
+                        </StyledTableRow>
+                    ))}
+                    </TableBody>
+                </Table>
+                </TableContainer>
+            
+      {/*      const [state, setState] = React.useState({
+    //     columns: [
+    //       { title: 'Name', field: 'name' },
+    //       { title: 'Label', field: '' },
+    //     ],
+    //     data: JSON.parse(lista),
+    //   });
+                 <MaterialTable
+                title="Editable Example"
+                columns={state.columns}
+                data={state.data}
+                options={{
+                    search: false,
+                    pageSizeOptions: 
+                }}
+                
+            /> */}
+        
+        </>
+        );
+    }
+}
+
+export default ListArguments
